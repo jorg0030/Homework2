@@ -1,0 +1,131 @@
+---
+title: "Homework2"
+output: html_document
+---
+
+**Alexis Jorgensen**
+
+# Scenario 1
+a) Na: The mean catch (in tonnes) has changed between 2009 and 2010
+No: the mean shrimp catch was the same in 2009 and 2010
+
+```{r}
+FishCatch <- read.csv("FishCatch.csv")
+names(FishCatch)
+attach(FishCatch)
+
+```
+b)
+```{r}
+hist(FishCatch$X2009.catch.tonnes,main = "Shrimp Catch 2009", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "Number of communities surveyed", col="gold")
+
+hist(FishCatch$X2010.catch.tonnes,main = "Shrimp Catch 2010", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "Number of communities surveyed", col="orange", ylim = c(0,4))
+```
+
+c) A paired two sample to test should be used to test the hypothesis as there are two mean values tro compare. The test is paired because the data was collecged at the same lcoations.
+
+d)
+```{r}
+t.test(X2010.catch.tonnes,X2009.catch.tonnes, paired=T)
+```
+p << than 0.05 so we reject the null hypothesis that there is no difference between the two groups
+
+e)
+```{r}
+qt(0.95,13)
+```
+1.7709>-6.3808 so tcrit > tobserved
+
+f) The test indicates that there is a signficant difference in shrimp catch between years
+
+# Scenario 2
+
+```{r}
+Site<-c(1,2,3,4,5,6,7,8,9,10)
+Ph<-c(18.4,12.9,15.3,18.3,15.6,23.3,16.5,12.3,24.6,16.2)
+SitePh<-data.frame(Site,Ph)
+SitePh
+```
+Guideline: 15micrograms/L
+
+a) Ho: The phosphorus levels in the lake are signifcantly different than teh guideline
+h1: the phosphorus levels in the lake are not signifcantly different than the guidline
+
+b)
+```{r}
+hist(SitePh$Ph,main="Phosphorus Levels in Lake Erie", las=1, xlab=expression(paste("Phosphorus Consentration (", mu,"g/L)")), ylab= "# Sample Sites", ylim=c(0,3),col="purple")
+```
+
+c) A one-sample t-test should be used to test the hypothesis as it involved comparing the data mean to a specific given value.A two tailed t-test will be used as the phosphorus levels can either be above or below the reocommended. 
+
+d)
+```{r}
+shapiro.test(SitePh$Ph)
+t.test(SitePh,mu=15)
+```
+
+
+e)
+```{r}
+qt(0.05,9)
+```
+-1.833113 > -2.2909 so tcrit > tobserved. Also p < 0.05
+
+f)The analysis supports the hypothesis that the level of phosphorus in lake Erie is signficantly greater than 15micrograms/L
+
+# Scenario 3
+
+a)Ho: There is no difference in growth rates betweent the fish fed a carniverous vs vegetarian diet
+Ha: There is a difference in the growth rate between fsh fed a carniverous and vegetarian diet
+
+b)
+```{r}
+Carnivor<-c(2.3,1.8,1.9,1.8,2.1,2.3,2.0,2.2,2.2,1.5,1.8,2.1,2.3,2.2,2.3)
+Veg<-c(1.6,1.1,0.7,1.0,1.0,0.9,1.2,0.8,0.9,0.6,0.7,0.6,0.8,0.8,1.1)
+Diet<-data.frame(Carnivor,Veg)
+
+hist(Carnivor,main="Growth rate of Farmed Salmon fed a Carniverous Diet",xlab="Growth rate (%/day)", ylab="# Trials", col="darkred")
+
+hist(Veg,main="Growth rate of Farmed Salmon fed a Vegetarian Diet",xlab="Growth rate (%/day)", ylab="# Trials", col="darkgreen")
+
+```
+c) A paired two sample t-test should be used as we are comparing two populations with different means, but they are within the same enviornment otherwise (same farm)
+
+d) 
+```{r}
+t.test(Veg, Carnivor, paired=T)
+```
+
+e)
+```{r}
+qt(0.95,14)
+```
+
+1.761 > -15.162 so tcrit > tobserved, and p << 0.05
+
+f)There is a significant difference in the growth rates between fish fed carniverous and vegetarian diets
+
+#Scenario 4
+
+a)Ha: Species trophic level and the impacts of PCB exposure are not independant
+Ho: Species trophic level and the impacts of PCB exposure are independant
+
+b)
+```{r}
+PCB<-read.csv("PCB.csv")
+```
+
+c)A chi-squared test should be used for this analysis
+
+d)
+```{r}
+chisq.test(PCB[2:3,2:4])
+```
+
+e)
+```{r}
+qchisq(0.95,2)
+```
+chisq crit << chisq crit and p << 0.05
+
+f) There is a significant difference of the impacts of PCB depending on trophic level

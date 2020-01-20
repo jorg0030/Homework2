@@ -2,12 +2,16 @@
 title: "Homework2"
 output: html_document
 ---
+ 
+ **Alexis Jorgensen**
 
-**Alexis Jorgensen**
+**Note** None of the datasets examined in this assignment follow a normal distribution. This violates the assumptions of most of the t-tests performed which may decrease the accuracy of results.
 
 # Scenario 1
-a) Na: The mean catch (in tonnes) has changed between 2009 and 2010
-No: the mean shrimp catch was the same in 2009 and 2010
+
+a) Ha: The mean catch (in tonnes) has changed between 2009 and 2010
+
+Ho: the mean shrimp catch was the same in 2009 and 2010
 
 ```{r}
 FishCatch <- read.csv("FishCatch.csv")
@@ -15,26 +19,36 @@ names(FishCatch)
 attach(FishCatch)
 
 ```
+
+
 b)
 ```{r}
-hist(FishCatch$X2009.catch.tonnes,main = "Shrimp Catch 2009", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "Number of communities surveyed", col="gold")
+hist(FishCatch$X2009.catch.tonnes,main = "Shrimp Catch 2009", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "# Communities Surveyed", col="gold")
 
-hist(FishCatch$X2010.catch.tonnes,main = "Shrimp Catch 2010", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "Number of communities surveyed", col="orange", ylim = c(0,4))
+hist(FishCatch$X2010.catch.tonnes,main = "Shrimp Catch 2010", xlab = "Annual Shrimp Catch (Tonnes)", ylab = "# Communities Surveyed", col="orange", ylim = c(0,4))
 ```
 
-c) A paired two sample to test should be used to test the hypothesis as there are two mean values tro compare. The test is paired because the data was collecged at the same lcoations.
+
+
+c) A paired two sample to test should be used to test the hypothesis as there are two mean values to compare. The test is paired because the data was collected at the same lcoations.
+
 
 d)
 ```{r}
 t.test(X2010.catch.tonnes,X2009.catch.tonnes, paired=T)
 ```
+
+
 p << than 0.05 so we reject the null hypothesis that there is no difference between the two groups
+
 
 e)
 ```{r}
-qt(0.95,13)
+qt(0.025,13)
 ```
-1.7709>-6.3808 so tcrit > tobserved
+
+-2.160369 > -6.3808 so tcrit > tobserved
+
 
 f) The test indicates that there is a signficant difference in shrimp catch between years
 
@@ -46,17 +60,21 @@ Ph<-c(18.4,12.9,15.3,18.3,15.6,23.3,16.5,12.3,24.6,16.2)
 SitePh<-data.frame(Site,Ph)
 SitePh
 ```
+
+
 Guideline: 15micrograms/L
 
-a) Ho: The phosphorus levels in the lake are signifcantly different than teh guideline
-h1: the phosphorus levels in the lake are not signifcantly different than the guidline
+a) Ho: The phosphorus levels in the lake are signifcantly different than the guideline
+
+Ha: the phosphorus levels in the lake are not signifcantly different than the guidline
+
 
 b)
 ```{r}
 hist(SitePh$Ph,main="Phosphorus Levels in Lake Erie", las=1, xlab=expression(paste("Phosphorus Consentration (", mu,"g/L)")), ylab= "# Sample Sites", ylim=c(0,3),col="purple")
 ```
 
-c) A one-sample t-test should be used to test the hypothesis as it involved comparing the data mean to a specific given value.A two tailed t-test will be used as the phosphorus levels can either be above or below the reocommended. 
+c) A one-sample t-test should be used to test the hypothesis as it involved comparing the data mean to a specific given value. 
 
 d)
 ```{r}
@@ -67,7 +85,8 @@ t.test(SitePh,mu=15)
 
 e)
 ```{r}
-qt(0.05,9)
+qt(0.95,19)
+0.3358/2
 ```
 -1.833113 > -2.2909 so tcrit > tobserved. Also p < 0.05
 
@@ -89,23 +108,25 @@ hist(Carnivor,main="Growth rate of Farmed Salmon fed a Carniverous Diet",xlab="G
 hist(Veg,main="Growth rate of Farmed Salmon fed a Vegetarian Diet",xlab="Growth rate (%/day)", ylab="# Trials", col="darkgreen")
 
 ```
-c) A paired two sample t-test should be used as we are comparing two populations with different means, but they are within the same enviornment otherwise (same farm)
+
+
+c) A Two sample t-test should be used as we are comparing two populations with different means, but they are within the same enviornment otherwise (same farm)
 
 d) 
 ```{r}
-t.test(Veg, Carnivor, paired=T)
+t.test(Veg, Carnivor)
 ```
 
 e)
 ```{r}
-qt(0.95,14)
+qt(0.025,14)
 ```
 
-1.761 > -15.162 so tcrit > tobserved, and p << 0.05
+-2.144787 > -15.162 so tcrit > tobserved, and p << 0.05
 
 f)There is a significant difference in the growth rates between fish fed carniverous and vegetarian diets
 
-#Scenario 4
+# Scenario 4
 
 a)Ha: Species trophic level and the impacts of PCB exposure are not independant
 Ho: Species trophic level and the impacts of PCB exposure are independant
@@ -113,19 +134,20 @@ Ho: Species trophic level and the impacts of PCB exposure are independant
 b)
 ```{r}
 PCB<-read.csv("PCB.csv")
+PCB
 ```
 
 c)A chi-squared test should be used for this analysis
 
 d)
 ```{r}
-chisq.test(PCB[2:3,2:4])
+chisq.test(PCB[1:2,2:4])
 ```
 
 e)
 ```{r}
 qchisq(0.95,2)
 ```
-chisq crit << chisq crit and p << 0.05
+chisq observed >> chisq crit and p << 0.05
 
-f) There is a significant difference of the impacts of PCB depending on trophic level
+f) The null hypothesis that PCB impacts are indepedant of trophic level can be rejected.
